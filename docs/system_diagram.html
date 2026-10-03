@@ -1,0 +1,296 @@
+<title>Linefollower H7 System Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ground: #EDF0EB;
+    --panel: #F9FBF7;
+    --chip: #E2E8E1;
+    --ink: #17201B;
+    --muted: #57645C;
+    --line: #BFC9C1;
+    --accent: #A4561C;
+    --vin: #BF3A2B;
+    --v5: #A8650A;
+    --v3: #23774A;
+    --va: #0C7280;
+    --sig: #2D4E9E;
+    --display: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+    --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0E1411; --panel: #161F1A; --chip: #1F2A24; --ink: #E3EAE5; --muted: #98A59D;
+      --line: #34413A; --accent: #DC8F52; --vin: #F07563; --v5: #E4A843; --v3: #62C38F; --va: #52C2CC; --sig: #8FAAF2;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0E1411; --panel: #161F1A; --chip: #1F2A24; --ink: #E3EAE5; --muted: #98A59D;
+    --line: #34413A; --accent: #DC8F52; --vin: #F07563; --v5: #E4A843; --v3: #62C38F; --va: #52C2CC; --sig: #8FAAF2;
+  }
+
+  body { background: var(--ground); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.55; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-inline: 20px; padding-block: 36px 64px; display: grid; gap: 40px; }
+
+  header { display: grid; gap: 10px; max-width: 72ch; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  h1 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 4.4vw, 46px); line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+  h2 { font-family: var(--display); font-weight: 600; font-size: 24px; margin: 0 0 12px; text-wrap: balance; }
+  p { margin: 0; max-width: 68ch; }
+  .muted { color: var(--muted); }
+  code, .mono { font-family: var(--mono); font-size: .9em; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .sw { width: 22px; height: 0; border-top: 3px solid; display: inline-block; }
+  .sw.dash { border-top: 2px dashed var(--muted); }
+
+  figure { margin: 0; display: grid; gap: 12px; }
+  .scroller { overflow-x: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; }
+  .scroller svg { display: block; width: 100%; min-width: 980px; height: auto; }
+  figcaption { font-size: 13.5px; color: var(--muted); max-width: 90ch; }
+
+  /* SVG classes (styled from page CSS so both themes resolve) */
+  .box { fill: var(--panel); stroke: var(--line); stroke-width: 1.2; }
+  .box.todo { stroke: var(--muted); stroke-dasharray: 6 4; fill: transparent; }
+  .mcu { fill: var(--panel); stroke: var(--ink); stroke-width: 1.8; }
+  .mcu-head { fill: var(--chip); }
+  .t-title { fill: var(--ink); font-family: var(--body); font-weight: 600; font-size: 13px; }
+  .t-detail { fill: var(--muted); font-family: var(--mono); font-size: 11px; }
+  .t-mcu { fill: var(--ink); font-family: var(--display); font-weight: 700; font-size: 24px; }
+  .t-pin { fill: var(--ink); font-family: var(--mono); font-size: 11px; }
+  .t-lbl { font-family: var(--mono); font-size: 11px; font-weight: 500; }
+  .t-tag { fill: var(--panel); font-family: var(--mono); font-size: 10px; font-weight: 500; }
+  .w { fill: none; stroke-width: 2; }
+  .vin { stroke: var(--vin); } .f-vin { fill: var(--vin); }
+  .v5 { stroke: var(--v5); } .f-v5 { fill: var(--v5); }
+  .v3 { stroke: var(--v3); } .f-v3 { fill: var(--v3); }
+  .va { stroke: var(--va); } .f-va { fill: var(--va); }
+  .sig { stroke: var(--sig); } .f-sig { fill: var(--sig); }
+  .ink { stroke: var(--muted); } .f-ink { fill: var(--muted); }
+
+  .tables { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr)); gap: 32px; align-items: start; }
+  .tbl { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+  th { text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 500; padding: 6px 10px 6px 0; border-bottom: 1.5px solid var(--ink); }
+  td { padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  td.mono { white-space: nowrap; }
+  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; vertical-align: 0; }
+  .todo-pill { font-family: var(--mono); font-size: 10.5px; border: 1px dashed var(--muted); color: var(--muted); padding: 0 6px; border-radius: 3px; white-space: nowrap; }
+  footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Main PCB · STM32H743ZIT6 · 2S LiPo</div>
+    <h1>Linefollower H7 System Map</h1>
+    <p class="muted">Target architecture for the main board after the audit fixes. It shows every block, the rail that powers it, the bus that connects it, and the exact MCU pins. Blocks with a dashed outline are not in the schematic yet.</p>
+  </header>
+
+  <div class="legend" aria-label="Legend">
+    <span><i class="sw" style="border-color:var(--vin)"></i>VIN 6.0–8.4 V (battery)</span>
+    <span><i class="sw" style="border-color:var(--v5)"></i>+5 V</span>
+    <span><i class="sw" style="border-color:var(--v3)"></i>+3V3 digital</span>
+    <span><i class="sw" style="border-color:var(--va)"></i>+3V3A analog</span>
+    <span><i class="sw" style="border-color:var(--sig)"></i>signals / buses (3.3 V logic)</span>
+    <span><i class="sw dash"></i>to be added to schematic</span>
+  </div>
+
+  <figure>
+    <div class="scroller">
+      <svg viewBox="0 0 1380 970" role="img" aria-label="Block diagram: a 2S battery feeds a protection FET and the VIN bus, which powers the TB6612 motor driver, a battery-sense divider and a TPS563201 5 V buck; a 3.3 V LDO feeds the STM32H743. The MCU connects to the KTIR sensor board over a 20-pin FFC to ADC3, to the HC-06 over USART1, the MPU6050 over I2C1, encoders on TIM2 and TIM3, the SWD header, a 25 MHz crystal, and the motor driver via TIM4 PWM and GPIO.">
+        <defs>
+          <marker id="a-vin" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="f-vin"/></marker>
+          <marker id="a-v5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="f-v5"/></marker>
+          <marker id="a-v3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="f-v3"/></marker>
+          <marker id="a-va" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="f-va"/></marker>
+          <marker id="a-sig" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="f-sig"/></marker>
+          <marker id="a-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="f-ink"/></marker>
+        </defs>
+
+        <!-- ===== Power column ===== -->
+        <rect class="box" x="40" y="30" width="260" height="80" rx="4"/>
+        <text class="t-title" x="54" y="62">2S LiPo battery</text>
+        <text class="t-detail" x="54" y="84">6.0–8.4 V · 200 mAh · JST-SYP</text>
+        <rect class="f-vin" x="248" y="38" width="44" height="16" rx="3"/><text class="t-tag" x="270" y="50" text-anchor="middle">VBAT</text>
+
+        <rect class="box" x="40" y="140" width="260" height="80" rx="4"/>
+        <text class="t-title" x="54" y="172">Fuse + reverse-polarity P-FET</text>
+        <text class="t-detail" x="54" y="194">0154005.DRT 5 A · AO4407A</text>
+
+        <rect class="box" x="40" y="250" width="260" height="80" rx="4"/>
+        <text class="t-title" x="54" y="282">TPS563201 buck (U6)</text>
+        <text class="t-detail" x="54" y="304">VIN → +5 V · 3 A · ~580 kHz</text>
+        <rect class="f-v5" x="262" y="258" width="30" height="16" rx="3"/><text class="t-tag" x="277" y="270" text-anchor="middle">5V</text>
+
+        <rect class="box" x="40" y="360" width="260" height="80" rx="4"/>
+        <text class="t-title" x="54" y="392">AMS1117-3.3 LDO (U3)</text>
+        <text class="t-detail" x="54" y="414">+5 V → +3V3 · 22 µF tantalum out</text>
+        <rect class="f-v3" x="258" y="368" width="34" height="16" rx="3"/><text class="t-tag" x="275" y="380" text-anchor="middle">3V3</text>
+
+        <rect class="box" x="40" y="470" width="260" height="80" rx="4"/>
+        <text class="t-title" x="54" y="502">FB1 ferrite + 1 µF / 10 nF</text>
+        <text class="t-detail" x="54" y="524">+3V3 → +3V3A (analog)</text>
+        <rect class="f-va" x="250" y="478" width="42" height="16" rx="3"/><text class="t-tag" x="271" y="490" text-anchor="middle">3V3A</text>
+
+        <rect class="box" x="40" y="580" width="260" height="80" rx="4"/>
+        <text class="t-title" x="54" y="612">Battery sense divider (R6/R7)</text>
+        <text class="t-detail" x="54" y="634">100 k / 47 k + 100 nF</text>
+
+        <rect class="box todo" x="40" y="690" width="260" height="80" rx="4"/>
+        <text class="t-title" x="54" y="722">LEDs D3/D4 + START button</text>
+        <text class="t-detail" x="54" y="744">LEDs drawn · button still to add</text>
+
+        <!-- power chain vertical arrows -->
+        <line class="w vin" x1="170" y1="110" x2="170" y2="138" marker-end="url(#a-vin)"/>
+        <text class="t-lbl f-vin" x="182" y="129">VBAT</text>
+        <line class="w vin" x1="170" y1="220" x2="170" y2="248" marker-end="url(#a-vin)"/>
+        <text class="t-lbl f-vin" x="182" y="239">VIN</text>
+        <line class="w v5" x1="170" y1="330" x2="170" y2="358" marker-end="url(#a-v5)"/>
+        <text class="t-lbl f-v5" x="182" y="349">+5 V</text>
+        <line class="w v3" x1="170" y1="440" x2="170" y2="468" marker-end="url(#a-v3)"/>
+        <text class="t-lbl f-v3" x="182" y="459">+3V3</text>
+
+        <!-- VIN bus: protection -> divider and motor driver -->
+        <path class="w vin" d="M40,180 H20 V940 H700 V902" marker-end="url(#a-vin)"/>
+        <path class="w vin" d="M20,620 H38" marker-end="url(#a-vin)"/>
+        <text class="t-lbl f-vin" x="360" y="932" text-anchor="middle">VIN bus · 6.0–8.4 V after protection → motor VM</text>
+
+        <!-- power column -> MCU -->
+        <line class="w v3" x1="300" y1="400" x2="498" y2="400" marker-end="url(#a-v3)"/>
+        <text class="t-lbl f-v3" x="400" y="392" text-anchor="middle">+3V3</text>
+        <line class="w va" x1="300" y1="510" x2="498" y2="510" marker-end="url(#a-va)"/>
+        <text class="t-lbl f-va" x="400" y="502" text-anchor="middle">+3V3A</text>
+        <line class="w sig" x1="300" y1="620" x2="498" y2="620" marker-end="url(#a-sig)"/>
+        <text class="t-lbl f-sig" x="400" y="612" text-anchor="middle">analog 0–2.7 V</text>
+        <line class="w sig" x1="302" y1="730" x2="500" y2="730" marker-start="url(#a-sig)"/>
+        <text class="t-lbl f-sig" x="400" y="722" text-anchor="middle">GPIO</text>
+
+        <!-- ===== Sensor board ===== -->
+        <rect class="box" x="500" y="40" width="400" height="90" rx="4"/>
+        <text class="t-title" x="514" y="74">KTIR sensor board ×8 (separate PCB)</text>
+        <text class="t-detail" x="514" y="98">reflective opto · emitters always on</text>
+        <rect class="f-v3" x="858" y="48" width="34" height="16" rx="3"/><text class="t-tag" x="875" y="60" text-anchor="middle">3V3</text>
+        <line class="w sig" x1="700" y1="130" x2="700" y2="198" marker-end="url(#a-sig)"/>
+        <text class="t-lbl f-sig" x="712" y="158">20-pin FFC · SENS1–8 → PF3–PF10 (ADC3)</text>
+        <text class="t-detail" x="712" y="176">analog 0–3.3 V · pin 1 = 3V3 · pin 20 = GND</text>
+
+        <!-- ===== MCU ===== -->
+        <rect class="mcu" x="500" y="200" width="400" height="540" rx="4"/>
+        <rect class="mcu-head" x="501" y="201" width="398" height="62"/>
+        <text class="t-mcu" x="516" y="232">STM32H743ZIT6 (U1)</text>
+        <text class="t-detail" x="516" y="252">Cortex-M7 · 480 MHz · 2 MB flash · 1 MB RAM · LQFP-144</text>
+
+        <text class="t-pin" x="512" y="404">VDD ×11 · VBAT · VDD33USB</text>
+        <text class="t-pin" x="512" y="514">VDDA · VREF+</text>
+        <text class="t-pin" x="512" y="624">PA4 · ADC1_INP18</text>
+        <text class="t-pin" x="512" y="734">PE0 · PE1 · PC13</text>
+
+        <text class="t-pin" x="888" y="304" text-anchor="end">PB14 TX · PB15 RX · PG7</text>
+        <text class="t-pin" x="888" y="399" text-anchor="end">PB6/PB7 I²C1 · PD5/PD6 USART2</text>
+        <text class="t-pin" x="888" y="494" text-anchor="end">PA0/PA1 TIM2 · PA6/PA7 TIM3</text>
+        <text class="t-pin" x="888" y="589" text-anchor="end">PA13 · PA14 · PB3 · NRST</text>
+        <text class="t-pin" x="888" y="684" text-anchor="end">PH0 · PH1</text>
+
+        <!-- ===== Right column ===== -->
+        <rect class="box" x="1030" y="262" width="330" height="76" rx="4"/>
+        <text class="t-title" x="1044" y="292">HC-06 Bluetooth module (U5)</text>
+        <text class="t-detail" x="1044" y="314">SPP · 115200 8N1 · RX/TX 3.3 V</text>
+        <rect class="f-v5" x="1322" y="270" width="30" height="16" rx="3"/><text class="t-tag" x="1337" y="282" text-anchor="middle">5V</text>
+        <line class="w sig" x1="902" y1="300" x2="1028" y2="300" marker-start="url(#a-sig)" marker-end="url(#a-sig)"/>
+        <text class="t-lbl f-sig" x="965" y="292" text-anchor="middle">USART1</text>
+
+        <rect class="box" x="1030" y="357" width="330" height="76" rx="4"/>
+        <text class="t-title" x="1044" y="387">MPU6050 + MCU IMU module (U2)</text>
+        <text class="t-detail" x="1044" y="409">I²C1 + USART2 · castellated 8 pads</text>
+        <rect class="f-v5" x="1322" y="365" width="30" height="16" rx="3"/><text class="t-tag" x="1337" y="377" text-anchor="middle">5V</text>
+        <line class="w sig" x1="902" y1="395" x2="1028" y2="395" marker-start="url(#a-sig)" marker-end="url(#a-sig)"/>
+        <text class="t-lbl f-sig" x="965" y="387" text-anchor="middle">I²C/UART</text>
+
+        <rect class="box" x="1030" y="452" width="330" height="76" rx="4"/>
+        <text class="t-title" x="1044" y="482">2× Pololu magnetic encoders</text>
+        <text class="t-detail" x="1044" y="504">A/B quadrature · 12 CPR · JST-SH 6p</text>
+        <rect class="f-v3" x="1318" y="460" width="34" height="16" rx="3"/><text class="t-tag" x="1335" y="472" text-anchor="middle">3V3</text>
+        <line class="w sig" x1="1030" y1="490" x2="902" y2="490" marker-end="url(#a-sig)"/>
+        <text class="t-lbl f-sig" x="965" y="482" text-anchor="middle">QEI ×2</text>
+
+        <rect class="box todo" x="1030" y="547" width="330" height="76" rx="4"/>
+        <text class="t-title" x="1044" y="577">SWD debug header (new)</text>
+        <text class="t-detail" x="1044" y="599">2×5 1.27 mm Cortex-M · ST-LINK</text>
+        <rect class="f-v3" x="1318" y="555" width="34" height="16" rx="3"/><text class="t-tag" x="1335" y="567" text-anchor="middle">3V3</text>
+        <line class="w sig" x1="902" y1="585" x2="1028" y2="585" marker-start="url(#a-sig)" marker-end="url(#a-sig)"/>
+        <text class="t-lbl f-sig" x="965" y="577" text-anchor="middle">SWD</text>
+
+        <rect class="box todo" x="1030" y="642" width="330" height="76" rx="4"/>
+        <text class="t-title" x="1044" y="672">25 MHz HSE crystal (new)</text>
+        <text class="t-detail" x="1044" y="694">PLL1 ÷5 ×192 ÷2 = 480 MHz</text>
+        <line class="w ink" x1="902" y1="680" x2="1030" y2="680"/>
+        <text class="t-lbl f-ink" x="965" y="672" text-anchor="middle">HSE</text>
+
+        <!-- ===== Motor driver + motors ===== -->
+        <line class="w sig" x1="700" y1="740" x2="700" y2="818" marker-end="url(#a-sig)"/>
+        <text class="t-lbl f-sig" x="712" y="772">PWM PD12 · PD13 (TIM4, 20 kHz)</text>
+        <text class="t-lbl f-sig" x="712" y="790">DIR PG2–PG5 · STBY PG6</text>
+
+        <rect class="box" x="500" y="820" width="400" height="80" rx="4"/>
+        <text class="t-title" x="514" y="852">TB6612FNG dual H-bridge (IC1)</text>
+        <text class="t-detail" x="514" y="874">VM = VIN · logic 3V3 · 1.2 A cont / 3.2 A pk</text>
+        <rect class="f-v3" x="858" y="828" width="34" height="16" rx="3"/><text class="t-tag" x="875" y="840" text-anchor="middle">3V3</text>
+        <rect class="f-vin" x="818" y="828" width="34" height="16" rx="3"/><text class="t-tag" x="835" y="840" text-anchor="middle">VIN</text>
+
+        <rect class="box" x="1030" y="820" width="330" height="80" rx="4"/>
+        <text class="t-title" x="1044" y="852">2× Pololu HPCB 6 V motors</text>
+        <text class="t-detail" x="1044" y="874">10:1 · stall ≈1.6 A @ 6 V</text>
+        <line class="w vin" x1="900" y1="860" x2="1028" y2="860" marker-end="url(#a-vin)"/>
+        <text class="t-lbl f-vin" x="965" y="852" text-anchor="middle">AO / BO</text>
+        <line class="w ink" x1="1195" y1="820" x2="1195" y2="720" stroke-dasharray="3 4"/>
+        <text class="t-detail" x="1205" y="806">encoder on motor shaft</text>
+      </svg>
+    </div>
+    <figcaption>Power flows down the left column and along the VIN bus to the motor driver; the MCU sits at the centre with each peripheral's bus, pins and supply rail marked. The colour of a line is the voltage domain it carries; the coloured tag on a block is the rail that powers it.</figcaption>
+  </figure>
+
+  <section class="tables">
+    <div>
+      <h2>MCU pin plan</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Function</th><th>Pins</th><th>Peripheral</th><th>Level</th></tr></thead>
+          <tbody>
+            <tr><td>KTIR SENS1–8</td><td class="mono">PF3–PF10</td><td>ADC3 INP5,9,4,8,3,7,2,6 · BDMA</td><td>0–3.3 V</td></tr>
+            <tr><td>Battery voltage</td><td class="mono">PA4</td><td>ADC1_INP18</td><td>0–2.7 V</td></tr>
+            <tr><td>Left encoder A/B</td><td class="mono">PA0 / PA1</td><td>TIM2 encoder (32-bit)</td><td>3.3 V</td></tr>
+            <tr><td>Right encoder A/B</td><td class="mono">PA6 / PA7</td><td>TIM3 encoder (16-bit)</td><td>3.3 V</td></tr>
+            <tr><td>Motor PWM A / B</td><td class="mono">PD12 / PD13</td><td>TIM4 CH1/CH2 · 20 kHz</td><td>3.3 V</td></tr>
+            <tr><td>Direction A/B</td><td class="mono">PG2–PG5</td><td>GPIO out</td><td>3.3 V</td></tr>
+            <tr><td>Motor STBY</td><td class="mono">PG6</td><td>GPIO out · 10 k pull-down</td><td>3.3 V</td></tr>
+            <tr><td>Bluetooth</td><td class="mono">PB14 / PB15</td><td>USART1 TX / RX (DMA)</td><td>3.3 V</td></tr>
+            <tr><td>BT state</td><td class="mono">PG7</td><td>GPIO in</td><td>3.3 V</td></tr>
+            <tr><td>IMU module</td><td class="mono">PB6 / PB7 · PD5 / PD6</td><td>I2C1 · USART2 TX / RX</td><td>3.3 V</td></tr>
+            <tr><td>Debug</td><td class="mono">PA13 · PA14 · PB3</td><td>SWDIO · SWCLK · SWO <span class="todo-pill">new header</span></td><td>3.3 V</td></tr>
+            <tr><td>Clock</td><td class="mono">PH0 / PH1</td><td>HSE 25 MHz <span class="todo-pill">new crystal</span></td><td>—</td></tr>
+            <tr><td>LEDs · START</td><td class="mono">PE0 · PE1 · PC13</td><td>GPIO out · EXTI13</td><td>3.3 V</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <h2>Voltage domains</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Rail</th><th>Source</th><th>Feeds</th><th>Est. load</th></tr></thead>
+          <tbody>
+            <tr><td><i class="dot" style="background:var(--vin)"></i>VIN 6.0–8.4 V</td><td>2S LiPo via fuse + P-FET</td><td>TB6612 VM, 5 V buck, battery divider</td><td>≤ 3–4 A peak</td></tr>
+            <tr><td><i class="dot" style="background:var(--v5)"></i>+5 V</td><td>TPS563201 buck</td><td>HC-06, IMU module, 3.3 V LDO</td><td>≈ 0.4 A</td></tr>
+            <tr><td><i class="dot" style="background:var(--v3)"></i>+3V3</td><td>LDO from +5 V</td><td>MCU, sensor board, encoders, IMU, TB6612 logic, LEDs</td><td>≈ 250–350 mA</td></tr>
+            <tr><td><i class="dot" style="background:var(--va)"></i>+3V3A</td><td>FB1 ferrite from +3V3</td><td>VDDA, VREF+ (ADC reference)</td><td>&lt; 5 mA</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted" style="margin-top:14px">Load figures are estimates; the sensor-board figure depends on the KTIR emitter resistors, which are still to be confirmed.</p>
+    </div>
+  </section>
+
+  <footer>Companion documents in the project: <code>PROJECT_CONTEXT.md</code> (handover) and <code>docs/HARDWARE_AUDIT.md</code> (full schematic and CubeMX findings).</footer>
+</div>

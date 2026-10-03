@@ -1,0 +1,60 @@
+# ===== KiCad =====
+# Local history (contains its own .git) and automatic backups
+.history/
+**/.history/
+*-backups/
+*.bak
+*.bck
+*.kicad_sch-bak
+*.kicad_pcb-bak
+*.sch-bak
+_autosave-*
+\#auto_saved_files\#
+
+# Lock files (exist only while a file is open)
+*.lck
+~*.lck
+
+# Caches and per-user view settings
+fp-info-cache
+*.kicad_prl
+
+# Fabrication / export output (regenerate from the PCB when needed)
+gerbers/
+Gerbers/
+fab/
+production/
+*.gbr
+*.drl
+*-job.gbrjob
+*.pos
+*-drc.rpt
+*-erc.rpt
+
+# ===== STM32CubeIDE / firmware =====
+code/Debug/
+code/Release/
+code/build/
+*.o
+*.d
+*.su
+*.cyclo
+*.elf
+*.map
+*.list
+*.bin
+*.hex
+*.launch
+code/.metadata/
+code/.settings/language.settings.xml
+
+# ===== Editors / OS =====
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# ===== Claude Code local settings =====
+.claude/settings.local.json
